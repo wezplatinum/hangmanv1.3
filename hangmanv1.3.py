@@ -78,9 +78,8 @@ def hangman():
                 print(f"Wrong letter, you lost 1 life. You now have {lives} remaining out of 6 {life_text}.")
 
             if len(word_letters) == 0:
-                print('\nYou have guessed the word', word, '!! Lives remaining:', lives)
+                print('\nCongratulations! You guessed the word correctly!', word, '!! Lives remaining:', lives)
                 high_scores[difficulty] += 1
-                print("Congratulations! You guessed the word correctly!")
                 break
 
         if lives == 0:
@@ -88,7 +87,7 @@ def hangman():
 
         continue_game = input("\nDo you want to play again? (yes/no): ").lower()
         if continue_game != "yes":
-            print("Exiting the game.")
+            print("Thank you for playing. Goodbye.")
             break
 
 hangman()
