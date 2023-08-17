@@ -1,15 +1,24 @@
 import random
 import string
+import json
 
 # Sample words (replace with your actual words)
 from words import words
 
-# Dictionary to store high scores
-high_scores = {"easy": 0, "medium": 0, "hard": 0}
+# Load high scores from a file if available
+try:
+    with open("high_scores.json", "r") as file:
+        high_scores = json.load(file)
+except FileNotFoundError:
+    high_scores = {"easy": 0, "medium": 0, "hard": 0}
+
+def save_high_scores():
+    with open("high_scores.json", "w") as file:
+        json.dump(high_scores, file)
 
 def categorize_words(words):
-    easy_words = [word for word in words if len(word) < 4]
-    medium_words = [word for word in words if 4 <= len(word) < 8]
+    easy_words = [word for word in words if len(word) <= 4]
+    medium_words = [word for word in words if 4 < len(word) <= 8]
     hard_words = [word for word in words if len(word) >= 8]
     return easy_words, medium_words, hard_words
 
@@ -38,7 +47,7 @@ def hangman():
 
         difficulty = input("\nChoose your difficulty (easy, medium, hard), or 'quit' to exit: ").lower()
         if difficulty == "quit":
-            print("Exiting the game.")
+            print("Thank you for playing. Have a great day.")
             break
 
         while difficulty not in ["easy", "medium", "hard"]:
@@ -78,8 +87,9 @@ def hangman():
                 print(f"Wrong letter, you lost 1 life. You now have {lives} remaining out of 6 {life_text}.")
 
             if len(word_letters) == 0:
-                print('\nCongratulations! You guessed the word correctly!', word, '!! Lives remaining:', lives)
+                print(f'\nCongratulations! You guessed the word {word} correctly!','Lives remaining:', lives)
                 high_scores[difficulty] += 1
+                save_high_scores()
                 break
 
         if lives == 0:
@@ -87,7 +97,8 @@ def hangman():
 
         continue_game = input("\nDo you want to play again? (yes/no): ").lower()
         if continue_game != "yes":
-            print("Thank you for playing. Goodbye.")
+            print("Thank you for playing. Have a great day.")
+            save_high_scores()
             break
 
 hangman()
